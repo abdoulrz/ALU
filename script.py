@@ -104,3 +104,36 @@ class CPU:
 
     def logi_or(self, a, b):
         return a | b
+
+if __name__ == "__main__":
+    cpu = CPU()
+    
+    print("--- Initial State ---")
+    print(f"Registers: {cpu.registers}")
+    print(f"Cache: {cpu.cache}")
+
+    print("\n--- Loading Values ---")
+    cpu.load(0, 10) # R0 = 10
+    cpu.load(1, 5)  # R1 = 5
+    print(f"Registers: {cpu.registers}")
+
+    print("\n--- Executing ADD (R0 + R1 -> R2) ---")
+    # Instruction: ADD, Reg A: 0, Reg B: 1, Store in Reg: 2
+    result = cpu.control_unit("ADD", 0, 1, 2)
+    print(f"Result: {result}")
+    print(f"Registers: {cpu.registers}")
+    print(f"Cache: {cpu.cache}")
+
+    print("\n--- Executing ADD Again (Cache Hit Check) ---")
+    # Should hit cache
+    result = cpu.control_unit("ADD", 0, 1, 2)
+    print(f"Result: {result}")
+
+    print("\n--- Executing MUL (R0 * R1 -> R3) ---")
+    cpu.control_unit("MUL", 0, 1, 3)
+    print(f"Registers: {cpu.registers}")
+    
+    print("\n--- Complex Operation: (R2 + R3) -> R0 ---")
+    # R2 is 15 (from ADD), R3 is 50 (from MUL)
+    cpu.control_unit("ADD", 2, 3, 0)
+    print(f"Registers: {cpu.registers}")
